@@ -63,6 +63,7 @@ def update_cars(request, pk):
     else:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
+
 @api_view(['DELETE'])
 def delete_cars(request, pk):
 
