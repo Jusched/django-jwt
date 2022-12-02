@@ -1,4 +1,5 @@
 # Rest Framework
+from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import serializers, status
@@ -8,25 +9,25 @@ from rest_framework.permissions import AllowAny
 from django.shortcuts import get_object_or_404
 
 # Local modules
-from serializers import CarSerializer
-from models import Car
-
+from ..serializers import CarSerializer
+from ..models import Car
 
 
 @api_view(["GET"])
+@permission_classes([AllowAny])
 def ApiView(request):
     api_urls= {
-        'all_items': 'all/',
-        'Add': '/create',
-        'Update': '/update/pk',
-        'Delete': '/item/pk/delete'
+        'all_cars': 'all/',
+        'Add': 'create/',
+        'Update': 'update/pk/',
+        'Delete': 'delete/pk/',
     }
-
     return Response(api_urls)
 
 
+
 @api_view(['POST'])
-def add_items(request):
+def add_cars(request):
     car = CarSerializer(data=request.data)
 
 # Validating
@@ -40,7 +41,7 @@ def add_items(request):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 
-@api_view(['GET'])
+@api_view(["GET"])
 @permission_classes([AllowAny])
 def view_cars(request):
     
@@ -72,3 +73,10 @@ def delete_cars(request, pk):
     car= get_object_or_404(Car, pk=pk)
     car.delete()
     return Response(status=status.HTTP_202_ACCEPTED)
+
+
+class BlacklistRefreshView():
+    def post(self, request):
+        token = RefreshToken(request.data.get('refresh'))
+        token.blacklist()
+        return Response("Success")
