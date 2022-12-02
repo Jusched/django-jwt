@@ -1,12 +1,15 @@
-"""Technical views."""
+# Rest Framework
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import serializers, status
 from rest_framework.permissions import AllowAny
 
+# Django
 from django.shortcuts import get_object_or_404
-from technical.serializers import CarSerializer
-from .models import Car
+
+# Local modules
+from serializers import CarSerializer
+from models import Car
 
 
 
@@ -22,9 +25,8 @@ def ApiView(request):
     return Response(api_urls)
 
 
-@api_view(['POST', 'GET'])
+@api_view(['POST'])
 def add_items(request):
-    permission_classes= [AllowAny]
     car = CarSerializer(data=request.data)
 
 # Validating
