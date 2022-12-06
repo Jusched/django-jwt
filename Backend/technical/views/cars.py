@@ -1,9 +1,9 @@
 # Rest Framework
-from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from rest_framework import serializers, status
 from rest_framework.permissions import AllowAny
+from rest_framework import serializers, status
+
 
 # Django
 from django.shortcuts import get_object_or_404
@@ -33,6 +33,7 @@ def add_cars(request):
 # Validating
     if Car.objects.filter(**request.data).exists():
         raise serializers.ValidationError("This car already exists.")
+
 
     if car.is_valid():
         car.save()
@@ -75,8 +76,5 @@ def delete_cars(request, pk):
     return Response(status=status.HTTP_202_ACCEPTED)
 
 
-class BlacklistRefreshView():
-    def post(self, request):
-        token = RefreshToken(request.data.get('refresh'))
-        token.blacklist()
-        return Response("Success")
+
+
