@@ -14,6 +14,8 @@ if os.path.isfile(dotenv_file):
     dotenv.load_dotenv(dotenv_file)
 
 SECRET_KEY= os.environ["SECRET_KEY"]
+ADMIN_LOGIN= os.environ["ADMIN_LOGIN"]
+ADMIN_PASSWORD= os.environ["ADMIN_PASSWORD"]
 
 
 # SECURITY WARNING: don't run with debug turned on in production!

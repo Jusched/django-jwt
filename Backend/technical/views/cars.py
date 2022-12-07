@@ -6,6 +6,7 @@ from rest_framework import serializers, status
 
 
 # Django
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 
 # Local modules
@@ -25,15 +26,15 @@ def ApiView(request):
     return Response(api_urls)
 
 
-
+@login_required
 @api_view(['POST'])
 def add_cars(request):
+
     car = CarSerializer(data=request.data)
 
 # Validating
     if Car.objects.filter(**request.data).exists():
         raise serializers.ValidationError("This car already exists.")
-
 
     if car.is_valid():
         car.save()
@@ -54,7 +55,7 @@ def view_cars(request):
     else:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-
+@login_required
 @api_view(['POST'])
 def update_cars(request, pk):
     
